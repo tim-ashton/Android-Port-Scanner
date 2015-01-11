@@ -20,7 +20,6 @@ public class MainActivity extends Activity implements Observer {
     private static final int PORTS_PER_THREAD = 655;
 
 
-
     private List<String> openPortList;
     private MyListAdapter adapter;
 
@@ -41,8 +40,7 @@ public class MainActivity extends Activity implements Observer {
         //init views and buttons
         scanButton = (Button) findViewById(R.id.button_send);
         mEdit = (EditText) findViewById(R.id.ip_address);
-        listView = (ListView)findViewById(R.id.test_list);
-
+        listView = (ListView) findViewById(R.id.test_list);
 
 
         openPortList = new ArrayList<String>();
@@ -57,35 +55,20 @@ public class MainActivity extends Activity implements Observer {
                 String host = mEdit.getText().toString();
 
 
-//                try{
-                    int numOfThreads = 100;
-                    Thread [] threads = new Thread[numOfThreads];
+                int numOfThreads = 100;
+                Thread[] threads = new Thread[numOfThreads];
 
-                    for (int i = 0; i < threads.length; i++) {
-                        //Create a new scanner here then observe it
-                        Scanner s = new Scanner(host, (i * PORTS_PER_THREAD), PORTS_PER_THREAD);
+                for (int i = 0; i < threads.length; i++) {
+                    //Create a new scanner here then observe it
+                    Scanner s = new Scanner(host, (i * PORTS_PER_THREAD), PORTS_PER_THREAD);
 
-                        s.addObserver((Observer) mContext);
+                    s.addObserver((Observer) mContext);
 
-                        threads[i] = new Thread(s);
-                        threads[i].start();
+                    threads[i] = new Thread(s);
+                    threads[i].start();
 
-                    }
-//                    for (int i = 0; i < threads.length; i++) {
-//                        threads[i].join();
-//                    }
-//                }
-//                catch (InterruptedException e){
-//                    Log.e(this.getClass().getName(), e.toString());
-//                }
+                }
 
-
-                //what was found
-                //openPortList= Scanner.openPortList;
-
-                //add to the adapter list
-                //adapter = new ArrayAdapter<String>(mContext, R.layout.list_item, openPortList);
-                //setListAdapter(adapter);
             }
         });
     }
@@ -105,12 +88,6 @@ public class MainActivity extends Activity implements Observer {
                 adapter.notifyDataSetChanged();
             }
         });
-
-        //openPortList.add(((Scanner) observable).getNextPort());
-
-
-        //adapter.notifyDataSetChanged();
-        //int x = 10;
     }
 
 
