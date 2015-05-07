@@ -10,12 +10,12 @@ import android.support.v7.app.ActionBarActivity;
 
 
 public class MainActivity extends ActionBarActivity
-        implements MainInputFragment.OnFragmentInteractionListener {
+        implements MainInputFragment.OnMainInputListener {
 
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu_activity);
+        setContentView(R.layout.activity_main);
 
         FragmentManager fm = getFragmentManager();
 
@@ -27,9 +27,8 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-
     @Override
-    public void onFragmentInteraction() {
-        //TODO
+    public void onMainInput() {
+        //TODO Call the task fragment to scan ports.
     }
 }

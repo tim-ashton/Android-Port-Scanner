@@ -11,14 +11,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 
-public class MainInputFragment extends Fragment {
+public class MainInputFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = MainInputFragment.class.getName();
 
+    private Button mStartScanButton;
+    private EditText mHostname;
+    private EditText mStartPort;
+    private EditText mEndPort;
 
-    private OnFragmentInteractionListener mListener;
+    private OnMainInputListener mListener;
 
     /*
      * Use this factory method to create a new instance of
@@ -27,7 +33,6 @@ public class MainInputFragment extends Fragment {
      * @return A new instance of fragment MainInputFragment.
      */
     public static MainInputFragment newInstance() {
-
         return new MainInputFragment();
     }
 
@@ -37,14 +42,24 @@ public class MainInputFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreateView()");
+        Log.i(TAG, "onCreate()");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(TAG, "onCreateView()");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_input, container, false);
+        View view = inflater.inflate(R.layout.fragment_main_input, container, false);
+
+        mStartScanButton = (Button) view.findViewById(R.id.button_start_scan);
+        mStartScanButton.setOnClickListener(this);
+
+        mHostname = (EditText) view.findViewById(R.id.et_ip_hostname);
+        mStartPort = (EditText) view.findViewById(R.id.et_start_port);
+        mEndPort = (EditText) view.findViewById(R.id.et_end_port);
+
+        return view;
     }
 
 
@@ -53,7 +68,7 @@ public class MainInputFragment extends Fragment {
         super.onAttach(activity);
         Log.i(TAG, "onAttach()");
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnMainInputListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -67,14 +82,24 @@ public class MainInputFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View v) {
+        Log.i(TAG, "onClick()");
+        mStartScanButton.setEnabled(false);
+
+        String hostName = mHostname.getText().toString();
+        String startPort = mStartPort.getText().toString();
+        String endPort = mEndPort.getText().toString();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
      */
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(); // TODO - Do something
+    public interface OnMainInputListener {
+        public void onMainInput(); // TODO - Do something
     }
 
 }
