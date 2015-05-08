@@ -14,15 +14,26 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 
 public class MainInputFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = MainInputFragment.class.getName();
 
     private Button mStartScanButton;
-    private EditText mHostname;
-    private EditText mStartPort;
-    private EditText mEndPort;
+    private EditText mHostnameEt;
+    private EditText mStartPortEt;
+    private EditText mEndPortEt;
+
+    private String mHostname;
+    private int mStartport;
+    private int mEndPort;
+
+    private boolean mValidHostName;
+//    private boolean mValid
 
     private OnMainInputListener mListener;
 
@@ -54,10 +65,41 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
 
         mStartScanButton = (Button) view.findViewById(R.id.button_start_scan);
         mStartScanButton.setOnClickListener(this);
+        mStartScanButton.setEnabled(false); // enable after everything is set and valid
 
-        mHostname = (EditText) view.findViewById(R.id.et_ip_hostname);
-        mStartPort = (EditText) view.findViewById(R.id.et_start_port);
-        mEndPort = (EditText) view.findViewById(R.id.et_end_port);
+        mHostnameEt = (EditText) view.findViewById(R.id.et_ip_hostname);
+        mStartPortEt = (EditText) view.findViewById(R.id.et_start_port);
+        mEndPortEt = (EditText) view.findViewById(R.id.et_end_port);
+
+        mHostnameEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    mHostname = mHostnameEt.getText().toString();
+                    if(IsValidIP(mHostname)){
+                        return;  // great send the I.P to be pinged
+                    }
+                    else {
+                        return;// TODO - try to resolve the hostname
+                    }
+                }
+            }
+        });
+
+        mStartPortEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    mStartport = IsValidPort(mStartPortEt.getText().toString());
+                }
+            }
+        });
+
+        mEndPortEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    mEndPort = IsValidPort(mEndPortEt.getText().toString());
+                }
+            }
+        });
 
         return view;
     }
@@ -85,11 +127,12 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         Log.i(TAG, "onClick()");
-        mStartScanButton.setEnabled(false);
+        //mStartScanButton.setEnabled(false); TODO
 
-        String hostName = mHostname.getText().toString();
-        String startPort = mStartPort.getText().toString();
-        String endPort = mEndPort.getText().toString();
+
+
+
+
     }
 
     /**
@@ -102,4 +145,57 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
         public void onMainInput(); // TODO - Do something
     }
 
+
+    private void ValidateInput() {
+
+    }
+
+    /*
+    IsValidIP()
+    Tests the string parameter to see it is in valid format 255.255.255.255
+     */
+    private static boolean IsValidIP(String ip) {
+        if (ip == null || ip.isEmpty()) {
+            return false;
+        }
+
+        ip = ip.trim();
+        if ((ip.length() < 6) & (ip.length() > 15)) {
+            return false;
+        }
+
+        try {
+            Pattern pattern = Pattern.compile(
+                    "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" +
+                            "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+            Matcher matcher = pattern.matcher(ip);
+            return matcher.matches();
+        } catch (PatternSyntaxException ex) {
+            return false;
+        }
+    }
+
+    private int IsValidPort(String port) {
+            if (port == null || port.isEmpty()) {
+            return 0;
+        }
+
+        int portNumber = 0;
+
+        port = port.trim();
+        try {
+            portNumber = Integer.parseInt(port);
+        } catch (NumberFormatException ex) {
+            return 0;
+        }
+
+        if((portNumber < 1) || (portNumber > 65535))
+        {
+            return 0;
+        }
+
+        return portNumber;
+    }
+
 }
+
