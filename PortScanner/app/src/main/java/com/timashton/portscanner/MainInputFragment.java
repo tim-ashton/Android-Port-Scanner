@@ -6,6 +6,7 @@ package com.timashton.portscanner;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,6 +55,8 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate()");
+        setRetainInstance(true);
+
     }
 
     @Override
@@ -75,12 +78,7 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     mHostname = mHostnameEt.getText().toString();
-                    if(IsValidIP(mHostname)){
-                        return;  // great send the I.P to be pinged
-                    }
-                    else {
-                        return;// TODO - try to resolve the hostname
-                    }
+                    // TODO - run the asynchtask
                 }
             }
         });
@@ -146,12 +144,34 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
     }
 
 
-    private void ValidateInput() {
+    /*
+    Private Async task to resolve and check the hosts existence in the background.
 
+    Report success or failure back to the activity in onPostExecute();
+     */
+    private class PingHostTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            //check if string is ip
+            //mHostIsIpAddress = IsValidIP(mHostname);
+        }
+
+        @Override
+        protected Void doInBackground(String... ignore) {
+            // Resolve and ping
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void ignore) {
+            // Report success/faiure
+        }
     }
 
     /*
     IsValidIP()
+
     Tests the string parameter to see it is in valid format 255.255.255.255
      */
     private static boolean IsValidIP(String ip) {
@@ -175,6 +195,11 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
         }
     }
 
+    /*
+    IsValidPort(String port)
+
+    Check that the port supplied is an integer and it is within port range (0 - 65535)
+     */
     private int IsValidPort(String port) {
             if (port == null || port.isEmpty()) {
             return 0;
