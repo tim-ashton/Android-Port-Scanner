@@ -30,7 +30,8 @@
         android:layout_marginRight="30dp"
         android:hint="Address of Host"
         android:imeOptions="actionNext"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:inputType="textWebEmailAddress"/>
 
     <TextView
         android:id="@+id/tv_enter_port"

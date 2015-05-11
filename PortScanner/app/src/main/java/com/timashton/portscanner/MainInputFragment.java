@@ -9,20 +9,24 @@ import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+import java.io.IOException;
+import java.net.InetAddress;
 
 
 public class MainInputFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = MainInputFragment.class.getName();
+    private static final int INVALID_PORT = -1;
+    private static final int MAX_PORTS = 100;
 
     private Button mStartScanButton;
     private EditText mHostnameEt;
@@ -30,11 +34,14 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
     private EditText mEndPortEt;
 
     private String mHostname;
+    private String mStartPortStr;
+    private String mEndPortStr;
     private int mStartport;
     private int mEndPort;
 
-    private boolean mValidHostName;
-//    private boolean mValid
+    private boolean mHostOk;
+    private boolean mPortsOk;
+
 
     private OnMainInputListener mListener;
 
@@ -56,7 +63,6 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate()");
         setRetainInstance(true);
-
     }
 
     @Override
@@ -78,7 +84,11 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     mHostname = mHostnameEt.getText().toString();
-                    // TODO - run the asynchtask
+                    if (mHostname == null || mHostname.isEmpty()) {
+                        return;
+                    }
+                    new PingHostTask().execute(mHostname);
+                    mStartScanButton.setEnabled(EnableScanButton());
                 }
             }
         });
@@ -86,7 +96,9 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
         mStartPortEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    mStartport = IsValidPort(mStartPortEt.getText().toString());
+                    mStartPortStr = mStartPortEt.getText().toString();
+                    mStartport = IsValidPort(mStartPortStr);
+                    mStartScanButton.setEnabled(EnableScanButton());
                 }
             }
         });
@@ -94,8 +106,22 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
         mEndPortEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    mEndPort = IsValidPort(mEndPortEt.getText().toString());
+                    mEndPortStr = mEndPortEt.getText().toString();
+                    mEndPort = IsValidPort(mEndPortStr);
+                    mStartScanButton.setEnabled(EnableScanButton());
                 }
+            }
+        });
+
+        mEndPortEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                int result = actionId & EditorInfo.IME_MASK_ACTION;
+                if(result == EditorInfo.IME_ACTION_DONE){
+                    mEndPort = IsValidPort(mEndPortEt.getText().toString());
+                    mStartScanButton.setEnabled(EnableScanButton());
+                }
+                return true;
             }
         });
 
@@ -150,50 +176,26 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
     Report success or failure back to the activity in onPostExecute();
      */
     private class PingHostTask extends AsyncTask<String, Void, Void> {
+        private boolean success = true;
 
         @Override
-        protected void onPreExecute() {
-            //check if string is ip
-            //mHostIsIpAddress = IsValidIP(mHostname);
-        }
-
-        @Override
-        protected Void doInBackground(String... ignore) {
-            // Resolve and ping
+        protected Void doInBackground(String... values) {
+            try {
+                InetAddress address = InetAddress.getByName(values[0]);
+                address.isReachable(5000);
+            } catch (IOException e) {
+                    success = false;
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void ignore) {
-            // Report success/faiure
+            mHostOk = success;
         }
     }
 
-    /*
-    IsValidIP()
 
-    Tests the string parameter to see it is in valid format 255.255.255.255
-     */
-    private static boolean IsValidIP(String ip) {
-        if (ip == null || ip.isEmpty()) {
-            return false;
-        }
-
-        ip = ip.trim();
-        if ((ip.length() < 6) & (ip.length() > 15)) {
-            return false;
-        }
-
-        try {
-            Pattern pattern = Pattern.compile(
-                    "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" +
-                            "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
-            Matcher matcher = pattern.matcher(ip);
-            return matcher.matches();
-        } catch (PatternSyntaxException ex) {
-            return false;
-        }
-    }
 
     /*
     IsValidPort(String port)
@@ -201,25 +203,35 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
     Check that the port supplied is an integer and it is within port range (0 - 65535)
      */
     private int IsValidPort(String port) {
-            if (port == null || port.isEmpty()) {
-            return 0;
+        if (port == null || port.isEmpty()) {
+            return INVALID_PORT;
         }
 
-        int portNumber = 0;
-
+        int portNumber;
         port = port.trim();
+
         try {
             portNumber = Integer.parseInt(port);
         } catch (NumberFormatException ex) {
-            return 0;
+            return INVALID_PORT;
         }
 
         if((portNumber < 1) || (portNumber > 65535))
         {
-            return 0;
+            return INVALID_PORT;
         }
 
         return portNumber;
+    }
+
+
+    private boolean EnableScanButton(){
+
+        boolean bothPortsValid = (mStartport != INVALID_PORT) && (mEndPort != INVALID_PORT);
+        boolean startLessEnd = (mStartport < mEndPort);
+        boolean lessThanMax = ((mEndPort - mStartport) <= MAX_PORTS);
+
+        return (bothPortsValid && startLessEnd && lessThanMax && mHostOk);
     }
 
 }
