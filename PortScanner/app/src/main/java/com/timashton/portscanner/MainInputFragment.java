@@ -6,6 +6,7 @@ package com.timashton.portscanner;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,14 +38,18 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
     private String mHostname;
     private String mStartPortStr;
     private String mEndPortStr;
-    private int mStartport;
+    private int mStartPort;
     private int mEndPort;
 
     private boolean mHostOk;
     private boolean mPortsOk;
 
 
-    private OnMainInputListener mListener;
+    private MainInputCallbacks mCallbacks;
+
+    public interface MainInputCallbacks {
+        void startScan(String hostName, int startPort, int endPort);
+    }
 
     /*
      * Use this factory method to create a new instance of
@@ -62,7 +68,7 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate()");
-        setRetainInstance(true);
+        //TODO setRetainInstance(true);
     }
 
     @Override
@@ -88,7 +94,7 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
                         return;
                     }
                     new PingHostTask().execute(mHostname);
-                    mStartScanButton.setEnabled(EnableScanButton());
+                    checkReadyToScan();
                 }
             }
         });
@@ -97,8 +103,8 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     mStartPortStr = mStartPortEt.getText().toString();
-                    mStartport = IsValidPort(mStartPortStr);
-                    mStartScanButton.setEnabled(EnableScanButton());
+                    mStartPort = isValidPort(mStartPortStr);
+                    checkReadyToScan();
                 }
             }
         });
@@ -107,8 +113,8 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     mEndPortStr = mEndPortEt.getText().toString();
-                    mEndPort = IsValidPort(mEndPortStr);
-                    mStartScanButton.setEnabled(EnableScanButton());
+                    mEndPort = isValidPort(mEndPortStr);
+                    checkReadyToScan();
                 }
             }
         });
@@ -118,8 +124,8 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 int result = actionId & EditorInfo.IME_MASK_ACTION;
                 if(result == EditorInfo.IME_ACTION_DONE){
-                    mEndPort = IsValidPort(mEndPortEt.getText().toString());
-                    mStartScanButton.setEnabled(EnableScanButton());
+                    mEndPort = isValidPort(mEndPortEt.getText().toString());
+                    checkReadyToScan();
                 }
                 return true;
             }
@@ -134,10 +140,10 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
         super.onAttach(activity);
         Log.i(TAG, "onAttach()");
         try {
-            mListener = (OnMainInputListener) activity;
+            mCallbacks = (MainInputCallbacks) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement MainInputCallbacks");
         }
     }
 
@@ -145,29 +151,18 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
     public void onDetach() {
         super.onDetach();
         Log.i(TAG, "onDetach()");
-        mListener = null;
+        mCallbacks = null;
     }
 
     @Override
     public void onClick(View v) {
         Log.i(TAG, "onClick()");
-        //mStartScanButton.setEnabled(false); TODO
-
-
-
-
+        mStartScanButton.setEnabled(false);
+        mCallbacks.startScan(mHostname, mStartPort, mEndPort);
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     */
-    public interface OnMainInputListener {
-        public void onMainInput(); // TODO - Do something
-    }
+
 
 
     /*
@@ -202,7 +197,7 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
 
     Check that the port supplied is an integer and it is within port range (0 - 65535)
      */
-    private int IsValidPort(String port) {
+    private int isValidPort(String port) {
         if (port == null || port.isEmpty()) {
             return INVALID_PORT;
         }
@@ -225,13 +220,33 @@ public class MainInputFragment extends Fragment implements View.OnClickListener 
     }
 
 
-    private boolean EnableScanButton(){
+    private void checkReadyToScan(){
 
-        boolean bothPortsValid = (mStartport != INVALID_PORT) && (mEndPort != INVALID_PORT);
-        boolean startLessEnd = (mStartport < mEndPort);
-        boolean lessThanMax = ((mEndPort - mStartport) <= MAX_PORTS);
+        boolean bothPortsValid = (mStartPort != INVALID_PORT) && (mEndPort != INVALID_PORT);
+        boolean startLessEnd = (mStartPort < mEndPort);
+        boolean lessThanMax = ((mEndPort - mStartPort) <= MAX_PORTS);
 
-        return (bothPortsValid && startLessEnd && lessThanMax && mHostOk);
+        boolean ready = (bothPortsValid && startLessEnd && lessThanMax && mHostOk);
+
+        mStartScanButton.setEnabled(ready);
+        hideKeyboard(ready);
+    }
+
+    private void hideKeyboard(boolean readyToScan) {
+        if (readyToScan == false){
+            return;
+        }
+
+        // Check if no view has focus:
+        View view = this.getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager =
+                    (InputMethodManager) this.getActivity()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
 }

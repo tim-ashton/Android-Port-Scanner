@@ -3,8 +3,16 @@ package com.timashton.portscanner;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /*
  * Created by Tim Ashton on 12/05/15.
@@ -14,138 +22,146 @@ import android.util.Log;
 public class ScanWorkerFragment extends Fragment {
 
     private static final String TAG = ScanWorkerFragment.class.getName();
-    private static final String HOSTNAME_TAG = "hostname_tag";
-    private static final String START_PORT_TAG = "start_port_tag";
-    private static final String END_PORT_TAG = "end_port_tag";
 
-    private String mHostName;
-    private int mStartPort;
-    private int mEndPort;
+    private static final int MAX_PORTS_PER_THREAD = 20;
 
-    //TODO - callbacks
+    private static ScanFragmentCallbacks mCallbacks;
+    private static PortFoundHandler mHandler;
+
+    public interface ScanFragmentCallbacks {
+        void addPortFound(String portFoundResult);
+    }
 
 
-    public ScanWorkerFragment newInstance(String hostName, int startPort, int endPort){
-        ScanWorkerFragment myFragment = new ScanWorkerFragment();
+    public static ScanWorkerFragment newInstance(){
+        return new ScanWorkerFragment();
+    }
 
-        Bundle args = new Bundle(3);
-        args.putString(HOSTNAME_TAG, hostName);
-        args.putInt(START_PORT_TAG, startPort);
-        args.putInt(END_PORT_TAG, endPort);
-        myFragment.setArguments(args);
-
-        return myFragment;
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        Log.i(TAG, "onAttach(activity)");
+        try {
+            mCallbacks = (ScanFragmentCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement ScanFragmentCallbacks");
+        }
     }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate(savedInstanceState)");
         setRetainInstance(true);
 
-        mHostName = getArguments().getString(HOSTNAME_TAG);
-        mStartPort = getArguments().getInt(START_PORT_TAG);
-        mEndPort = getArguments().getInt(END_PORT_TAG);
 
+        if (savedInstanceState == null) {
+            mHandler = new PortFoundHandler(this);
+        }
     }
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        //TODO check some callbacks are created
-
-    }
-
-
-
 
     @Override
     public void onDetach() {
         super.onDetach();
-        // TODO - remove handlers
+        mCallbacks = null;
+    }
+
+    private static class PortFoundHandler extends Handler {
+
+        private final WeakReference<ScanWorkerFragment> myClassWeakReference;
+
+        public PortFoundHandler(ScanWorkerFragment myClassInstance) {
+            myClassWeakReference = new WeakReference<>(myClassInstance);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            ScanWorkerFragment myClass = myClassWeakReference.get();
+            if (myClass != null) {
+                mCallbacks.addPortFound(msg.obj.toString());
+            }
+        }
+    }
+
+    public void startScannerThread(String hostName, int startPort, int endPort) {
+        Log.i(TAG, "startScannerThread()");
+
+        //Prepare lists of port numbers
+        List<Integer> ports  = new ArrayList<>();
+        for(int i = startPort; i <= endPort; i++){
+            ports.add(i);
+        }
+        List<List<Integer>> portSubList = subList(ports, MAX_PORTS_PER_THREAD);
+
+        // Create the new boss thread
+        ScannerThread mScannerThread = new ScannerThread(hostName, portSubList);
+        mScannerThread.start();
     }
 
 
     /*
-     * Class DemoThread
+     * Class ScannerThread
      *
-     * Inner thread class to run the dummy thread by overriding the thread.run method.
-     * Make static because there should only ever be one of these.
-     *
-     * Allows parent to pause and restart the thread by calling the appropriate methods.
-     *
+     * Inner thread class to run the boss thread by overriding the thread.run method.
+     * Make static because there should only ever be one of these running in the port
+     * scanner application at any time.
      */
-    static class DemoThread extends Thread {
+    public static class ScannerThread extends Thread implements ScannerRunnable.ScanRunnableCallbacks {
 
-        private static final String TAG = DemoThread.class.getName();
+        private static final String TAG = ScannerThread.class.getName();
 
-        private final Object mPauseLock;
-        private boolean mPaused;
-        private boolean mFinished;
+        private String threadHostname;
+        private List<List<Integer>> threadPorts;
 
-        public DemoThread() {
-            Log.i(TAG, "DemoRunnable()");
-            mPauseLock = new Object();
-            mPaused = false;
-            mFinished = false;
+        public ScannerThread(String hostName, List<List<Integer>> ports) {
+            threadHostname = hostName;
+            threadPorts = ports;
         }
 
+        @SuppressWarnings("unused")
+        private ScannerThread() {
+        }
 
         @Override
         public void run() {
-            Log.i(TAG, "run()");
+            ExecutorService es = Executors.newCachedThreadPool();
+
+            // Create and add Scanner Runnables to the ExecutorService.
+            for (int i = 0; i < threadPorts.size(); i++) {
+                es.execute(new ScannerRunnable(threadHostname, threadPorts.get(i), this));
+            }
+            es.shutdown();
 
             try {
-                int i = 0;
-                while (!mFinished) {
-                    String countText = "Item: " + i++ + " added to list!";
-                    Message msg = new Message();
-                    msg.obj = countText;
-                    //mHandler.sendMessage(msg);
+                // TODO allow configurable timeout
+                while (!es.awaitTermination(10, TimeUnit.MINUTES)) {  // Wait for all threads};
 
-                    //Add an item every 1/2 second
-                    Thread.sleep(500);
-
-                    if (i == 25) {
-                        mFinished = true;
-                    }
-
-                    synchronized (mPauseLock) {
-                        while (mPaused) {
-                            try {
-                                mPauseLock.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+                    //TODO - do I need to allow pausing of the boss thread ?
                 }
-            } catch (Exception e) {
-                // TODO
+            } catch (InterruptedException e) {
+                Log.e(TAG, e.toString());
             }
         }
 
-        /*
-         * Called on fragment pause.
-         */
-        public void onPause() {
-            Log.i(TAG, "onPause()");
-            synchronized (mPauseLock) {
-                mPaused = true;
-            }
+        @Override
+        public void onPortFound(String portFoundResult) {
+            Message msg = new Message();
+            msg.obj = portFoundResult;
+            mHandler.sendMessage(msg);
         }
+    }
 
-        /*
-         * Called on fragment resume.
-         */
-        public void onResume() {
-            Log.i(TAG, "onResume()");
-            synchronized (mPauseLock) {
-                mPaused = false;
-                mPauseLock.notifyAll();
-            }
+    // Splits a list into sublists of length L
+    private static <T> List<List<T>> subList(List<T> list, final int L) {
+        List<List<T>> parts = new ArrayList<>();
+        final int N = list.size();
+        for (int i = 0; i < N; i += L) {
+            parts.add(new ArrayList<>(
+                            list.subList(i, Math.min(N, i + L)))
+            );
         }
+        return parts;
     }
 }
