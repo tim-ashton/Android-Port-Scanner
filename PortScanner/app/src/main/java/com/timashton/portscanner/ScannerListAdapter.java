@@ -6,6 +6,7 @@ package com.timashton.portscanner;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,9 @@ public class ScannerListAdapter  extends BaseAdapter {
 
 
     public ScannerListAdapter(Activity context, List<ScannerListItem> list) {
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "ScannerListAdapter()");
+        }
         mContext = context;
         mList = list;
     }

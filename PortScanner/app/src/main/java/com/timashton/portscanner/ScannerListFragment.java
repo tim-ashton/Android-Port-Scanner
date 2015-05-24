@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -27,22 +26,32 @@ public class ScannerListFragment extends Fragment {
     private int mOldFirstVisibleItem;
 
     public static ScannerListFragment newInstance() {
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "newInstance()");
+        }
         return new ScannerListFragment();
     }
 
     public ScannerListFragment() {
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "ScannerListFragment()");
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate()");
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "onCreate()");
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i(TAG, "onCreateView()");
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "onCreateView()");
+        }
         View rootView = inflater.inflate(R.layout.fragment_scanner_list, container, false);
 
         mFragmentListView =
@@ -96,19 +105,50 @@ public class ScannerListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.i(TAG, "onPause()");
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "onPause()");
+        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "onResume()");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "onDetach()");
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "onDestroy()");
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedState) {
         super.onSaveInstanceState(savedState);
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "onSaveInstanceState()");
+        }
         ArrayList<ScannerListItem> bundledListItems = (ArrayList) mDemoListAdapter.getList();
         savedState.putParcelableArrayList(ITEMS_LIST_TAG, bundledListItems);
     }
 
 
     public void updateListView(String text) {
-        Log.i(TAG, "updateListView(String text)");
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "updateListView()");
+        }
         ScannerListItem item = new ScannerListItem(text);
         mItems.add(item);
         mDemoListAdapter.notifyDataSetChanged();

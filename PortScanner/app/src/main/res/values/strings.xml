@@ -4,16 +4,16 @@
     <string name="app_name">Android Port Scanner</string>
 
 
-    <string name="action_settings">Settings</string>
+    <!-- fragment scan description strings -->
+    <string name="fragment_scan_description_title">Scanning . . . </string>
+    <string name="fragment_scan_description_title_done">" Done"</string>
+    <string name="fragment_scan_description_host">somehost.com.au</string>
+    <string name="fragment_scan_description_ports_found">Ports found: </string>
+    <string name="fragment_scan_description_ports_found_numb">0</string>
 
 
-    <!-- Main Menu Strings -->
-    <string name="ping_menu_button_title">Ping A Host</string>
-    <string name="common_ports_menu_button_title">Scan Common Ports</string>
-    <string name="custom_ports_menu_button_title">Scan Selected Ports</string>
-    <string name="all_ports_menu_button_title">Scan All Ports</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- dialog_transition strings-->
+    <string name="dialog_transition_initial_text">Checking Latency</string>
+    <string name="dialog_transition_host_unreachable">No Response</string>
 
 </resources>
