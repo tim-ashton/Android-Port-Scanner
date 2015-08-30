@@ -9,3 +9,5 @@ The app allows user to input a hostname or an IP address and then scan a range o
 
 This is the finished application:
 https://play.google.com/store/apps/details?id=com.timashton.aportscanner
+
+Note: There are significant code differences to the released port scannner listed on google play (above).
