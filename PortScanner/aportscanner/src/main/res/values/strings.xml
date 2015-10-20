@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">A Port Scanner</string>
+
+    <!-- fragment main input strings -->
+    <string name="fragment_main_input_tv_enter_ip">Hostname:</string>
+    <string name="fragment_main_input_tv_enter_ip_sub">Enter IP or Hostname</string>
+    <string name="fragment_main_input_tv_host_required">Host or IP required</string>
+    <string name="fragment_main_input_et_ip_hostname">Address of Host</string>
+    <string name="fragment_main_input_tv_enter_port">Port Range:</string>
+    <string name="fragment_main_input_et_start_port">First</string>
+    <string name="fragment_main_input_et_end_port">Last</string>
+    <string name="fragment_main_input_button_start_scan">Scan Now</string>
+    <string name="fragment_main_input_tv_enter_port_sub">Maximum 100 ports</string>
+    <string name="fragment_main_input_tv_invalid_port">Invalid port entered</string>
+    <string name="fragment_main_input_tv_start_less_end">Last must be greater than First</string>
+    <string name="fragment_main_input_tv_invalid_port_range">Too many ports (Max 100)</string>
+
+
+    <!-- fragment scan description strings -->
+    <string name="fragment_scan_description_title">"Scanning "</string>
+
+    <string name="fragment_scan_description_title_done">Done</string>
+    <string name="fragment_scan_description_host">somehost.com.au</string>
+    <string name="fragment_scan_description_port_range">"Range: "</string>
+    <string name="fragment_scan_description_port_range_numbs">65435 – 65535</string>
+    <string name="fragment_scan_description_ports_found">"Ports Found: "</string>
+    <string name="fragment_scan_description_ports_found_numb">0</string>
+    <string name="fragment_scan_description_host_ping">"Latency(ms): "</string>
+    <string name="fragment_scan_description_host_ping_numb">5050</string>
+
+    <!-- fragment scan list strings -->
+    <string name="fragment_scan_list_title">Open ports:</string>
+    <string name="fragment_scan_list_none_found">No ports discovered.</string>
+
+    <!-- progress_dialog_fragment strings-->
+    <string name="dialog_transition_initial_text">Checking Latency</string>
+    <string name="dialog_transition_host_unreachable">No Response</string>
+
+
+    <!-- list item strings -->
+    <string name="list_item_list_item_title">List Item:</string>
+
+    <!-- Ad Id -->
+    <string name="banner_ad_unit_id">ca-app-pub-1602058626891390/4121711266</string>
+</resources>

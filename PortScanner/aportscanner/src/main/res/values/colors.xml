@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="opaque_white" type="color">#DDFFFFFF</item>
+    <item name="black" type="color">#FF000000</item>
+    <item name="light_red" type="color">#FFC14444</item>
+    <item name="small_text_grey" type="color">#FF494949</item>
+</resources>

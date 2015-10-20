@@ -1,0 +1,138 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_main_input_scroll"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="@style/fragment_theme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/sw320dp_ldpi_margin"
+        android:layout_marginLeft="@dimen/sw320dp_ldpi_margin"
+        android:layout_marginRight="@dimen/sw320dp_ldpi_margin"
+        android:layout_marginTop="@dimen/sw320dp_ldpi_margin"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/sw320dp_ldpi_padding"
+        android:paddingLeft="@dimen/sw320dp_ldpi_padding"
+        android:paddingRight="@dimen/sw320dp_ldpi_padding"
+        android:paddingTop="@dimen/sw320dp_ldpi_padding"
+        tools:context=".MainActivity$MainInputFragment">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_enter_ip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/fragment_main_input_tv_enter_ip"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/tv_enter_ip_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/fragment_main_input_tv_enter_ip_sub"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_ip_hostname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/fragment_main_input_et_ip_hostname"
+                    android:imeOptions="actionNext|flagNoFullscreen"
+                    android:inputType="textWebEmailAddress"
+                    android:singleLine="true" />
+
+                <ImageButton
+                    android:id="@+id/button_show_recent_hosts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_keyboard_arrow_down_black_24dp"
+                    tools:ignore="contentDescription" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_enter_port"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/fragment_main_input_tv_enter_port"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/tv_enter_port_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/fragment_main_input_tv_enter_port_sub"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_start_port"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789"
+                    android:hint="@string/fragment_main_input_et_start_port"
+                    android:imeOptions="actionNext|flagNoFullscreen"
+                    android:inputType="number"
+                    android:singleLine="true" />
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/et_end_port"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789"
+                    android:hint="@string/fragment_main_input_et_end_port"
+                    android:imeOptions="actionDone|flagNoFullscreen"
+                    android:inputType="number"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_start_scan"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/fragment_main_input_button_start_scan"
+            android:textAppearance="?android:attr/textAppearanceButton"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/sw320dp_xhdpi_margin"
+    android:layout_marginEnd="@dimen/sw320dp_xhdpi_margin"
+    android:layout_marginStart="0dp"
+    android:layout_marginTop="@dimen/sw320dp_xhdpi_margin"
+    android:layout_weight="7"
+    style="@style/fragment_theme"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/sw320dp_xhdpi_padding"
+    android:paddingLeft="@dimen/sw320dp_xhdpi_padding"
+    android:paddingRight="@dimen/sw320dp_xhdpi_padding"
+    android:paddingTop="@dimen/sw320dp_xhdpi_padding"
+    tools:context=".MainActivity$ScanFragment">
+
+    <TextView
+        android:id="@+id/tv_scan_list_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_scan_list_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ListView
+        android:id="@+id/fragment_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#00000000"
+        android:dividerHeight="0dp" />
+
+</LinearLayout>

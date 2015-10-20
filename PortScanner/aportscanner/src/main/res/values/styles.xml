@@ -1,0 +1,82 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/activity_background</item>
+        <item name="android:textAppearanceLarge">@style/large_text</item>
+        <item name="android:textAppearanceMedium">@style/medium_text</item>
+        <item name="android:textAppearanceSmall">@style/small_text</item>
+        <item name="android:buttonStyle">@android:style/Widget.Button</item>
+        <item name="android:textAppearanceListItem">@style/textAppearanceListItem</item>
+        <item name="android:textAppearanceListItemSmall">@style/textAppearanceListItemSmall</item>
+    </style>
+
+    <style name="fragment_theme">
+        <item name="android:background">@color/opaque_white</item>
+    </style>
+
+    <style name="menu_portrait_spacer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:background">?android:attr/dividerHorizontal</item>
+    </style>
+
+    <style name="large_text">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="medium_text">
+        <item name="android:color">@color/black</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="small_text">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/small_text_grey</item>
+    </style>
+
+    <style name="textAppearanceListItem">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="textAppearanceListItemSmall">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="button">
+        <item name="android:textAppearance">?android:attr/textAppearanceButton</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="sw720dp_large_text">
+        <item name="android:textSize">46sp</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="sw720dp_list_text">
+        <item name="android:textSize">36sp</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="sw720dp_medium_text">
+        <item name="android:textSize">26sp</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="sw720dp_small_text">
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@color/small_text_grey</item>
+    </style>
+
+    <style name="sw720dp_button_text">
+        <item name="android:textSize">26sp</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
+
+</resources>
+

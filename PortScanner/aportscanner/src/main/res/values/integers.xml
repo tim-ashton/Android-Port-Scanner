@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Card flip durations -->
+    <integer name="card_flip_time_full">300</integer>
+    <integer name="card_flip_time_half">150</integer>
+
+    <!-- fragment slide animation durations -->
+    <integer name="animator_slide_time">1000</integer>
+
+</resources>

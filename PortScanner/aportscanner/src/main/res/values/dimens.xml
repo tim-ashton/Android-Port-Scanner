@@ -1,0 +1,44 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="progress_bar_length">200dp</dimen>
+
+    <!-- sw320_ldpi layouts -->
+    <dimen name="sw320dp_ldpi_padding">4dp</dimen>
+    <dimen name="sw320dp_ldpi_margin">4dp</dimen>
+    <dimen name="sw320dp_ldpi_main_input_end_padding">10dp</dimen>
+
+
+    <!-- sw320_mdpi layouts -->
+    <dimen name="sw320dp_mdpi_padding">8dp</dimen>
+    <dimen name="sw320dp_mdpi_margin">8dp</dimen>
+    <dimen name="sw320dp_mdpi_main_input_end_padding">10dp</dimen>
+
+
+    <!-- sw320dp_hdpi layouts -->
+    <dimen name="sw320dp_hdpi_padding">16dp</dimen>
+    <dimen name="sw320dp_hdpi_margin">16dp</dimen>
+    <dimen name="sw320dp_hdpi_main_input_end_padding">10dp</dimen>
+    <dimen name="sw320dp_hdpi_main_input_port_divider_portrait">40dp</dimen>
+
+
+    <!-- sw320dp_hdpi layouts -->
+    <dimen name="sw320dp_xhdpi_padding">16dp</dimen>
+    <dimen name="sw320dp_xhdpi_margin">16dp</dimen>
+    <dimen name="sw320dp_xhdpi_main_input_end_padding">10dp</dimen>
+    <dimen name="sw320dp_xhdpi_main_input_port_divider_portrait">40dp</dimen>
+
+
+    <!-- sw720dp layouts -->
+    <dimen name="sw720dp_padding">32dp</dimen>
+    <dimen name="sw720dp_margin">32dp</dimen>
+    <dimen name="sw720dp_main_input_end_padding">50dp</dimen>
+    <dimen name="sw720dp_main_input_vertical_spacing">26dp</dimen>
+    <dimen name="sw720dp_main_input_port_et_width">75dp</dimen>
+    <dimen name="sw720dp_main_input_port_divider">100dp</dimen>
+    <dimen name="sw720dp_progress_bar_length">420dp</dimen>
+    <dimen name="sw720dp_scan_description_vertical_spacing">8dp</dimen>
+
+</resources>

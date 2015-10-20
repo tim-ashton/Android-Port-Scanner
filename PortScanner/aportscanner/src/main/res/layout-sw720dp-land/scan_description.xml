@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/fragment_theme"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/sw720dp_margin"
+    android:layout_marginLeft="@dimen/sw720dp_margin"
+    android:layout_marginRight="@dimen/sw720dp_margin"
+    android:layout_marginTop="@dimen/sw720dp_margin"
+    android:layout_weight="7"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/sw720dp_padding"
+    android:paddingLeft="@dimen/sw720dp_padding"
+    android:paddingRight="@dimen/sw720dp_padding"
+    android:paddingTop="@dimen/sw720dp_padding"
+    tools:context=".MainActivity$ScanFragment">
+
+    <TextView
+        android:id="@+id/tv_scan_desc_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_scan_description_title"
+        android:textAppearance="@style/sw720dp_large_text" />
+
+    <TextView
+        android:id="@+id/tv_scan_desc_title_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_scan_description_title_done"
+        android:textAppearance="@style/sw720dp_large_text" />
+
+    <TextView
+        android:id="@+id/tv_scan_desc_host"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/sw720dp_scan_description_vertical_spacing"
+        android:text="@string/fragment_scan_description_host"
+        android:textAppearance="@style/sw720dp_medium_text" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/sw720dp_scan_description_vertical_spacing"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_scan_desc_port_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_scan_description_port_range"
+            android:textAppearance="@style/sw720dp_medium_text" />
+
+        <TextView
+            android:id="@+id/tv_scan_desc_port_range_numbs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_scan_description_port_range_numbs"
+            android:textAppearance="@style/sw720dp_medium_text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/sw720dp_scan_description_vertical_spacing"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_scan_desc_host_ping"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_scan_description_host_ping"
+            android:textAppearance="@style/sw720dp_medium_text" />
+
+        <TextView
+            android:id="@+id/tv_scan_desc_host_ping_numb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_scan_description_host_ping_numb"
+            android:textAppearance="@style/sw720dp_medium_text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_scan_desc_ports_found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_scan_description_ports_found"
+            android:textAppearance="@style/sw720dp_medium_text" />
+
+        <TextView
+            android:id="@+id/tv_scan_desc_ports_found_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_scan_description_ports_found_numb"
+            android:textAppearance="@style/sw720dp_medium_text" />
+
+    </LinearLayout>
+
+</LinearLayout>
